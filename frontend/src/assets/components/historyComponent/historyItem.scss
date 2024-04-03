@@ -1,0 +1,29 @@
+// CustomTimerItem.scss
+.timer-item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+
+  .timer-name {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+
+  .timer-details {
+    display: flex;
+    flex-direction: column;
+
+    .detail {
+      margin-bottom: 5px;
+    }
+
+    .deleted {
+      color: red;
+    }
+    .active{ 
+      color: rgb(33, 213, 33);
+    }
+  }
+}

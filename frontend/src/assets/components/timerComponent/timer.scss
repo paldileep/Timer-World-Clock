@@ -1,0 +1,43 @@
+
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 5px;
+
+  .list-item-text {
+    flex-grow: 1; 
+  }
+
+  .title{ 
+    border: 1px solid black;
+    border-radius: 5px; 
+    padding: 3px 3px;  
+    color: #000; 
+    margin-right: 1rem;
+  }
+  
+
+  .close-button {
+    border: none;
+    padding: 8px 12px; 
+    background-color: #dc3545;
+    color: #fff; 
+    cursor: pointer; 
+
+  }
+
+  .pause-button {
+    border: none; 
+    padding: 8px 12px; 
+    background-color: #ffc107; 
+    color: #000; 
+  }
+
+}
+
+
+
+

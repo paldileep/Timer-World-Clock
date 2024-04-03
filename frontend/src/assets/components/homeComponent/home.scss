@@ -1,0 +1,50 @@
+.timer_container { 
+
+    display: flex;
+    height: 90vh;
+
+    .timer_list_section {
+      flex: 2;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    
+      h2 {
+        margin-bottom: 10px;
+      }
+    
+      .input-box {
+        
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    
+      }
+    
+      .start-button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        margin-left: 1rem;
+    
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+    
+
+
+
+    .new_timer_section{ 
+      flex: 1;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+}
