@@ -19,6 +19,10 @@ app.use(timerRoutes);
 
 const port = process.env.PORT
 
+app.use('/', (req, res)=>{
+    res.status(200).send('Api is running')
+})
+
 app.listen(port, () => {
   console.log(`Server is listening at ${port}`);
 });
