@@ -6,6 +6,8 @@ import Timer from './Timer'
 import axios from 'axios'
 import "./timerList.scss"
 
+const BASE_URL = import.meta.env.VITE_BASE_URL
+
 const TimerList = () => {
 
   const state = useSelector(timerSelector)
@@ -25,7 +27,7 @@ const TimerList = () => {
       try {
 
         const data = { timerId: id, activeDuration:formatTime(timeLeft) , isDeleted: true, deleteDate: true }
-        await axios.put('http://localhost:3000/timer', data)
+        await axios.put(`${BASE_URL}/timer`, data)
         dispatch(removeTimer({id: id}))
         dispatch(setHelper(id+randomNumber))
         
@@ -40,7 +42,7 @@ const TimerList = () => {
       try {
 
         const data = { timerId: id, activeDuration: formatTime(timeLeft) }
-        await axios.put('http://localhost:3000/timer', data)
+        await axios.put(`${BASE_URL}/timer`, data)
         dispatch(togglePause({id: id}))
         dispatch(setHelper(id+randomNumber))
         

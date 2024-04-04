@@ -7,6 +7,7 @@ import HistoryList from '../historyComponent/HistoryList'
 import { setHelper } from '../../redux/reducers/apiHelperSlice'
 
 import axios from "axios"
+const BASE_URL = import.meta.env.VITE_BASE_URL
 
 const Home = () => {
 
@@ -33,7 +34,7 @@ const Home = () => {
           const timerId = parseInt(Math.random() * 1000000000).toString()
 
           const data = { timerName: timerName, duration: totalDuration, timerId:  timerId }
-          await axios.post('http://localhost:3000/timer', data)
+          await axios.post(`${BASE_URL}/timer`, data)
 
           dispatch(setTimer( { totalDuration, id: timerId, timerName , timeLeft: totalDuration* 60 } ))
           dispatch(setHelper(timerId))

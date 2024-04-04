@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { timerSelector } from "../../redux/reducers/timerSlice"
 import { apiHelperSelector } from '../../redux/reducers/apiHelperSlice'
 
+const BASE_URL = import.meta.env.VITE_BASE_URL
+
 const HistoryList = () => {
 
   const [timerList, setTimerList] = useState([])
@@ -14,7 +16,7 @@ const HistoryList = () => {
 
   const fetchTimerList = async () => { 
     try {
-      const response = await axios.get('http://localhost:3000/timer');
+      const response = await axios.get(`${BASE_URL}/timer`);
       setTimerList(response.data.data)
     } catch (error) {
       console.error('Error fetching timer list:', error);
