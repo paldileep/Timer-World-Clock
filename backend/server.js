@@ -1,7 +1,11 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+
+require('dotenv').config();
+
 const cors = require("cors")
+
+
 
 const dbConnect = require('./db')
 dbConnect()
@@ -13,6 +17,7 @@ const timerRoutes = require('./routes/timerRoutes')
 
 app.use(timerRoutes);
 
+const port = process.env.PORT
 
 app.listen(port, () => {
   console.log(`Server is listening at ${port}`);

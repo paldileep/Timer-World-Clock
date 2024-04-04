@@ -1,5 +1,5 @@
-import Home from "./assets/components/homeComponent/Home"
-import Worldclock from "./assets/components/worldClockComponent/Worldclock"
+import Home from "./components/homeComponent/Home"
+import Worldclock from "./components/worldClockComponent/Worldclock"
 import { Routes, Route , NavLink } from "react-router-dom"
 
 function App() {
