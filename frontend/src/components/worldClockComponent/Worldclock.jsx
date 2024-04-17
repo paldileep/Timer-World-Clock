@@ -32,7 +32,7 @@ const Worldclock = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://worldtimeapi.org/api/timezone');        
+        const response = await axios.get('https://worldtimeapi.org/api/timezone');        
         dispatch(zoneList(response.data))
         setLoading(false);
 
@@ -64,12 +64,8 @@ const Worldclock = () => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`http://worldtimeapi.org/api/timezone/${zoneState.currentZone || "Asia/Kolkata"}`); 
-        if (!response.ok) {
-          setLoading(false);
-        }
-        const data = await response.json();
-        setZoneDetails(data);
+        const response = await axios.get(`https://worldtimeapi.org/api/timezone/${zoneState.currentZone || "Asia/Kolkata"}`);
+        setZoneDetails(response.data);
         setLoading(false);
 
       } catch (error) {
