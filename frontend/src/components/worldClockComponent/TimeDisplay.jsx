@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
  
 const TimeDisplay = ({ dateString, zone , className}) => {
   const [formattedTime, setFormattedTime] = useState('');
-  console.log('dateString-->', dateString)
  
   useEffect(() => {
  
@@ -17,7 +16,6 @@ const TimeDisplay = ({ dateString, zone , className}) => {
         hour12: false
       }).format(date);
  
-      console.log('newDate-->', newDate)
       setFormattedTime(newDate);
     };
  
