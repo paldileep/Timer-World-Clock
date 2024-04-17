@@ -33,7 +33,6 @@ const timerSlice = createSlice({
          },
          updateAllTimeLeft(state, {payload}) {
             const { spendTime } = payload;
-            console.log('spendTime-->', spendTime)
             return state.map(timer => {
                   if(!timer.isPause){
                      return { ...timer, timeLeft: timer.timeLeft - spendTime}
