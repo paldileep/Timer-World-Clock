@@ -1,33 +1,35 @@
 .world-clock-container {
-  max-width: 400px;
-  margin: 0 auto;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items:start;
+  background-image: url('https://images.unsplash.com/photo-1513026705753-bc3fffca8bf4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-size: cover;
+}
+
+.box {
+  width: 50%;
+  height: 30%;
   padding: 20px;
+  margin-top: 3rem;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+
+  align-items: center; 
+}
+
+select {
+  width: 50%; 
+  padding: 10px;
+  margin-bottom: 20px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  text-align: center;
+  border-radius: 5px;
+  font-size: 16px;
+}
 
-  h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-
-  select {
-    padding: 8px 12px;
-    font-size: 16px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    cursor: pointer;
-  }
-
-  h2 {
-    font-size: 20px;
-    margin-top: 30px;
-  }
-
-  p {
-    font-size: 16px;
-    margin: 10px 0;
-  }
+.time-display {
+  font-size: 30px;
 }

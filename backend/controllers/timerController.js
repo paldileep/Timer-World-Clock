@@ -4,7 +4,7 @@ const TimerModel = require("../models/timerModel")
 exports.setTimer = async (req, res, next) => { 
     try {
 
-      const { timerName, timerId, duration } = req.body
+      const { timerName, timerId, duration, timeLeft } = req.body
       if(!timerName) 
           return res.status(400).json({message: "no timerName provided"})
 
@@ -17,7 +17,8 @@ exports.setTimer = async (req, res, next) => {
       const newTimer = new TimerModel({ 
           timerName: timerName, 
           totalDuration: duration,
-          timerId: timerId
+          timerId: timerId, 
+          timeLeft: timeLeft
       })
 
       const timerSaved = await newTimer.save()
@@ -41,7 +42,7 @@ exports.getTimer = async (req, res, next) => {
       return res.status(200).json({message:  `${timers.length} timers found`, data: timers})
       
     } catch (error) {
-      return res.status(500).json({error:error.message})
+      return res.status(500).json({error:error.message, message: "Something went wrong"})
     }
 } 
 
@@ -49,7 +50,7 @@ exports.getTimer = async (req, res, next) => {
 exports.updateTimer = async (req, res, next) => { 
     try {
 
-      const { timerId, activeDuration, isDeleted = false , deleteDate = false } = req.body
+      const { timerId, activeDuration, isDeleted = false , deleteDate = false, timeLeft } = req.body
       if(!timerId) 
           return res.status(400).json({message: "no timerId provided"})
 
@@ -64,6 +65,7 @@ exports.updateTimer = async (req, res, next) => {
       if(isDeleted) timer.isDeleted = true
       if(deleteDate) timer.deleteDate = new Date()
       timer.activeDuration = activeDuration
+      timer.timeLeft = timeLeft
 
       const updatedTimer = await timer.save()
 

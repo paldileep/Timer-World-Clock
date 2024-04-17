@@ -1,85 +1,121 @@
-import React, { useState, useEffect } from 'react';
-import { DateTime } from 'luxon';
+import React, { useState, useEffect, useRef } from 'react';
+import TimeDisplay from './TimeDisplay';
+import Loader from '../../utils/Loader';
+
 import './worldclock.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { setZone, worldclockSelector } from '../../redux/reducers/worldclockSlice';
+import { setZone, worldclockSelector, zoneList } from '../../redux/reducers/worldclockSlice';
+import { updateAllTimeLeft } from "../../redux/reducers/timerSlice"
 
-const timeZoneList = [
-  {
-    timeZone: 'PST (Pacific Standard Time)',
-    utcValue: 'UTC-8',
-  },
-  {
-    timeZone: 'MST (Mountain Standard Time)',
-    utcValue: 'UTC-7',
-  },
-  {
-    timeZone: 'CST (Central Standard Time)',
-    utcValue: 'UTC-6',
-  },
-  {
-    timeZone: 'EST (Eastern Standard Time)',
-    utcValue: 'UTC-5',
-  },
-  {
-    timeZone: 'CET (Central European Time)',
-    utcValue: 'UTC+1',
-  },
-  {
-    timeZone: 'IST (Indian Standard Time)',
-    utcValue: 'UTC+5:30',
-  },
-];
 
 const Worldclock = () => {
-  const dispatch = useDispatch();
 
-  // Get selected time zone from Redux state
-  const selectedTimeZone = useSelector(worldclockSelector);
+  const dispatch = useDispatch()
 
-  // Current time in the selected time zone
-  const [currentTime, setCurrentTime] = useState(DateTime.now().setZone(selectedTimeZone));
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Dispatch action to set default time zone on component mount
+  const zoneState = useSelector(worldclockSelector)
+
+
+  const [zoneDetails, setZoneDetails] = useState(null)
+
+  const spendTimeRef = useRef(0)
+
+  const handleZoneChange = (e) => { 
+    const value = e.target.value
+    dispatch(setZone(value))
+  }
+
   useEffect(() => {
-    if(!selectedTimeZone){
-      dispatch(setZone(timeZoneList[0].utcValue));
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://worldtimeapi.org/api/timezone'); 
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        
+        const data = await response.json();
+        dispatch(zoneList(data))
+        setLoading(false);
+
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
+    const setIntervalId =  setInterval(() => {
+        spendTimeRef.current += 1;
+    },  1000);
+
+    fetchData();
+
+    return () => {
+      dispatch(updateAllTimeLeft({ spendTime : spendTimeRef.current}))
+      clearInterval(setIntervalId)
+      
     }
-    
+
+
+
   }, []);
 
-  // Update current time when selected time zone changes
+
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(DateTime.now().setZone(selectedTimeZone));
-    }, 1000);
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`http://worldtimeapi.org/api/timezone/${zoneState.currentZone || "Asia/Kolkata"}`); 
+        if (!response.ok) {
+          setLoading(false);
+        }
+        const data = await response.json();
+        setZoneDetails(data);
+        setLoading(false);
 
-    return () => clearInterval(interval);
-  }, [selectedTimeZone]);
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    };
 
-  const handleTimeZoneChange = (e) => {
-    dispatch(setZone(e.target.value));
-  };
+    fetchData(); 
+  }, [zoneState.currentZone]);
+
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
 
   return (
     <div className='world-clock-container'>
-      <h1>World Clock</h1>
 
-      <div>
-        <select onChange={handleTimeZoneChange} value={selectedTimeZone || timeZoneList[0].utcValue}>
-          {timeZoneList.map((zone, index) => (
-            <option key={index} value={zone.utcValue}>
-              {zone.timeZone}
-            </option>
-          ))}
+      <div className='box'>
+        <select value={zoneState.currentZone} onChange={handleZoneChange}>
+          {/* <option value="">Select a zone</option> */}
+          {zoneState.timeZoneList && zoneState.timeZoneList.map((item, index)=> { 
+              return <option key={index} value={item}>{item}</option>
+          })}
         </select>
+
+        {loading && <Loader />}
+
+        {!loading && zoneDetails && <TimeDisplay  
+            className="time-display"
+            dateString={zoneDetails.datetime} 
+            zone={zoneDetails.timezone}/>}
       </div>
 
-      <h2>Current Time and Date in {selectedTimeZone}</h2>
-      <p>Time: {currentTime.toFormat('HH:mm:ss')}</p>
-      <p>Date: {currentTime.toFormat('DD')}</p>
+    
+
     </div>
-  );
+  )
+
+
 };
 
 export default Worldclock;

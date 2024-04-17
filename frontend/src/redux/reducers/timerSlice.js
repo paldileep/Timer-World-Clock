@@ -18,7 +18,7 @@ const timerSlice = createSlice({
             if (timer) {
               timer.timeLeft = timeLeft;
             }
-          },
+         },
          removeTimer: (state, {payload}) => { 
                return state.filter(item => item.id !== payload.id)
          },
@@ -30,11 +30,25 @@ const timerSlice = createSlice({
                       return item
                     }
                } )
-         } 
+         },
+         updateAllTimeLeft(state, {payload}) {
+            const { spendTime } = payload;
+            console.log('spendTime-->', spendTime)
+            return state.map(timer => {
+                  if(!timer.isPause){
+                     return { ...timer, timeLeft: timer.timeLeft - spendTime}
+                  }
+                  else{ 
+                     return timer
+                  }
+            });
+            
+           
+         }, 
     }
 })
 
 
 export const timerSelector = (state) => state.timer
-export const { setTimer, updateTimeLeft, removeTimer, togglePause } = timerSlice.actions
+export const { setTimer, updateTimeLeft, removeTimer, togglePause , updateAllTimeLeft} = timerSlice.actions
 export const timerReducer = timerSlice.reducer

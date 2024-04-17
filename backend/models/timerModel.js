@@ -18,6 +18,9 @@ const timerSchema = new mongoose.Schema({
     activeDuration: { 
       type: String,
       default: null
+    },
+    timeLeft: { 
+      type: Number
     }, 
     isDeleted: { 
       type: Boolean, 

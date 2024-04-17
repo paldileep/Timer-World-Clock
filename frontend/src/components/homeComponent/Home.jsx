@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./home.scss"
 import TimerList from '../timerComponent/TimerList'
 import { useDispatch } from "react-redux"
@@ -11,6 +11,8 @@ const BASE_URL = import.meta.env.VITE_BASE_URL
 
 const Home = () => {
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const [timerName, setTimerName ] = useState('')
   const [totalDuration, setTotalDuration ] = useState('')
@@ -26,25 +28,43 @@ const Home = () => {
   }
 
   const startTimer = async (e) => { 
-      e.preventDefault()
+      try {
 
-      if(timerName && totalDuration){
+        e.preventDefault()
 
-        
-          const timerId = parseInt(Math.random() * 1000000000).toString()
+        if(timerName && totalDuration){
 
-          const data = { timerName: timerName, duration: totalDuration, timerId:  timerId }
-          await axios.post(`${BASE_URL}/timer`, data)
-
-          dispatch(setTimer( { totalDuration, id: timerId, timerName , timeLeft: totalDuration* 60 } ))
-          dispatch(setHelper(timerId))
           
-          setTimerName('')
-          setTotalDuration('')
+            const timerId = parseInt(Math.random() * 1000000000).toString()
 
-      }else{ 
-        alert('Please fill both the fields...')
+            const data = { timerName: timerName, duration: totalDuration, timerId:  timerId, timeLeft: totalDuration* 60 }
+            setLoading(false);
+            await axios.post(`${BASE_URL}/timer`, data)
+
+            dispatch(setTimer( { totalDuration, id: timerId, timerName , timeLeft: totalDuration* 60 } ))
+            dispatch(setHelper(timerId))
+            setLoading(false);
+            
+            setTimerName('')
+            setTotalDuration('')
+
+        }else{ 
+          alert('Please fill both the fields...')
+        }
+        
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
       }
+  }
+
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (error) {
+    return <div>Error: {error}</div>;
   }
 
   return (

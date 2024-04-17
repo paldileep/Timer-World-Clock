@@ -1,9 +1,12 @@
+
+import { useEffect } from "react";
 import Home from "./components/homeComponent/Home"
 import Worldclock from "./components/worldClockComponent/Worldclock"
+import { NotFound } from "./utils/Notfound";
+
 import { Routes, Route , NavLink } from "react-router-dom"
 
 function App() {
-
 
   return (
     <div className="container">
@@ -19,7 +22,9 @@ function App() {
 
             <Routes>
                 <Route path="/" element={<Home/>}/>
-                <Route path="/worldclock" element={<Worldclock/>}/>  
+                <Route path="/worldclock" element={<Worldclock/>}/>
+                <Route path="*" element={<NotFound />} />
+
             </Routes>  
 
         </div>
