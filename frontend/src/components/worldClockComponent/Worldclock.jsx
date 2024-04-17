@@ -6,6 +6,7 @@ import './worldclock.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { setZone, worldclockSelector, zoneList } from '../../redux/reducers/worldclockSlice';
 import { updateAllTimeLeft } from "../../redux/reducers/timerSlice"
+import axios from 'axios';
 
 
 const Worldclock = () => {
@@ -31,13 +32,8 @@ const Worldclock = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://worldtimeapi.org/api/timezone'); 
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        
-        const data = await response.json();
-        dispatch(zoneList(data))
+        const response = await axios.get('http://worldtimeapi.org/api/timezone');        
+        dispatch(zoneList(response.data))
         setLoading(false);
 
       } catch (error) {
