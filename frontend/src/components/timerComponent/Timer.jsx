@@ -8,8 +8,6 @@ const Timer = ({startTime, removeTimerHandler, pauseTimer, id, isPause, name}) =
 
   const dispatch = useDispatch();
 
-  const timeSpendState = useSelector(worldclockSelector)
-
   const timer = useSelector(state => state.timer.find(timer => timer.id === id));
 
 
