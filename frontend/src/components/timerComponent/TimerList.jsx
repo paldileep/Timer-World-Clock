@@ -13,6 +13,7 @@ const TimerList = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [actionId, setActionId] = useState(null);
 
 
   const state = useSelector(timerSelector)
@@ -64,6 +65,7 @@ const TimerList = () => {
 
         const data = { timerId: id, activeDuration: formatTime(timeLeft), timeLeft: timeLeft }
         setLoading(true)
+        setActionId(id);
         await axios.put(`${BASE_URL}/timer`, data)
         dispatch(togglePause({id: id}))
         dispatch(setHelper(id+randomNumber))
@@ -98,13 +100,21 @@ const TimerList = () => {
     <div className='currentTimerList'>
         <h3>Current Timer List</h3>
         <hr/>
-        {loading? <Loader/> : state && state.map(item=> <Timer key={item.id} 
-                                          id={item.id}
-                                          name={item.timerName} 
-                                          startTime={item.totalDuration} 
-                                          isPause={item.isPause}
-                                          removeTimerHandler={removeTimerHandler}
-                                          pauseTimer={pauseTimerHandler}/>)}
+
+    {state &&
+        state.map((item) => (
+          <Timer
+            key={item.id}
+            id={item.id}
+            name={item.timerName}
+            startTime={item.totalDuration}
+            isPause={item.isPause}
+            removeTimerHandler={removeTimerHandler}
+            pauseTimer={pauseTimerHandler}
+            loading={loading}
+            actionId={actionId}
+          />
+        ))}
     </div>
 
   )

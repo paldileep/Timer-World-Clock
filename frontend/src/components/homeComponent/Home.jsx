@@ -64,7 +64,7 @@ const Home = () => {
   }
   
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>{error}</div>;
   }
 
   return (
