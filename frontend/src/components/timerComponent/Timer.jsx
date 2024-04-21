@@ -41,7 +41,7 @@ const Timer = ({startTime, removeTimerHandler, pauseTimer, id, isPause, name}) =
       clearInterval(intervalId);
     }
 
-  }, [dispatch, id, timer.isPause, timer.timeLeft]);
+  }, [id, timer.isPause, timer.timeLeft]);
 
   return (
 

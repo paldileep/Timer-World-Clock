@@ -20,10 +20,29 @@
     }
 
     .deleted {
-      color: red;
+      color: rgb(214, 2, 2);
     }
     .active{ 
       color: rgb(33, 213, 33);
     }
   }
+}
+
+.deletebtn{ 
+  padding: 10px 10px;
+  background-color: #da4d43;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.control_buttons{ 
+  display: flex;
+  justify-content:space-around;
+}
+
+.control_buttons button {
+  width: 30%; 
+  box-sizing: border-box; 
 }

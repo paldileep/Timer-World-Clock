@@ -1,0 +1,39 @@
+.navBar {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  width: 100vw;
+
+}
+
+.menu a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.menu a:hover {
+  background-color: #555;
+}
+
+.sideMenu {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.sideMenu span {
+  margin-right: 10px;
+}
+
+

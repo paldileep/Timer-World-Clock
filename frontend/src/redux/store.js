@@ -6,11 +6,13 @@ import storage from 'redux-persist/lib/storage'
 import { timerReducer } from "../redux/reducers/timerSlice"
 import { worldclockReducer } from "./reducers/worldclockSlice"
 import { apiHelperReducer } from "./reducers/apiHelperSlice"
+import { userReducer } from "./reducers/userSlice"
 
 const  rootReducer = combineReducers({ 
         timer: timerReducer,
         worldclock: worldclockReducer,
-        apiHelper: apiHelperReducer
+        apiHelper: apiHelperReducer,
+        user: userReducer
 })
 
 const persistConfig = {

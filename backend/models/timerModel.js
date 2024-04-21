@@ -25,6 +25,10 @@ const timerSchema = new mongoose.Schema({
     isDeleted: { 
       type: Boolean, 
       default: false
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users"
     }
 
 }, 

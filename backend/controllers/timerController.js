@@ -3,7 +3,7 @@ const TimerModel = require("../models/timerModel")
 
 exports.setTimer = async (req, res, next) => { 
     try {
-
+  
       const { timerName, timerId, duration, timeLeft } = req.body
       if(!timerName) 
           return res.status(400).json({message: "no timerName provided"})
@@ -18,7 +18,8 @@ exports.setTimer = async (req, res, next) => {
           timerName: timerName, 
           totalDuration: duration,
           timerId: timerId, 
-          timeLeft: timeLeft
+          timeLeft: timeLeft,
+          user: req.user._id
       })
 
       const timerSaved = await newTimer.save()
@@ -35,7 +36,7 @@ exports.setTimer = async (req, res, next) => {
 exports.getTimer = async (req, res, next) => { 
     try {
 
-      const timers = await TimerModel.find().sort({ createdAt: -1})
+      const timers = await TimerModel.find({user: req.user._id}).sort({ createdAt: -1})
       if(timers.length < 1){
           return res.status(200).json({message: "no timer found", data: []})
       }
@@ -78,5 +79,65 @@ exports.updateTimer = async (req, res, next) => {
     } catch (error) {
       return res.status(500).json({error:error.message})
     }
+}
+
+exports.updateAllTimer = async (req, res, next) => { 
+  try {
+      const timersToUpdate = req.body.timers; 
+
+      if (!timersToUpdate || !Array.isArray(timersToUpdate)) {
+          return res.status(400).json({ message: "No timers provided or invalid format" });
+      }
+
+      for (const timer of timersToUpdate) {
+          const { timerId, activeDuration, isDeleted = false, deleteDate = false, timeLeft } = timer;
+
+          if (!timerId || !activeDuration) {
+              return res.status(400).json({ message: "Invalid timer data" });
+          }
+
+          const existingTimer = await TimerModel.findOne({ timerId: timerId });
+          if (!existingTimer) {
+              return res.status(400).json({ message: `No timer found with id ${timerId}` });
+          }
+
+
+          if (isDeleted) existingTimer.isDeleted = true;
+          if (deleteDate) existingTimer.deleteDate = new Date();
+          existingTimer.activeDuration = activeDuration;
+          existingTimer.timeLeft = timeLeft;
+
+
+          await existingTimer.save();
+      }
+
+      return res.status(200).json({ message: "All timers updated successfully" });
+      
+  } catch (error) {
+      return res.status(500).json({ error: error.message });
+  }
+};
+
+
+exports.deleteTimer = async (req, res, next) => { 
+  try {
+
+    const { timerId } = req.params
+    if(!timerId) 
+        return res.status(400).json({message: "no timerId provided"})
+
+    const timer = await TimerModel.deleteOne({$and:[
+        {timerId: timerId},
+        {user:req.user._id}
+    ]})
+
+    if(!timer){
+          return res.status(400).json({message: "error in deleting timer"})
+    }
+    return res.status(200).json({message: "timer deleted successfully"}) 
+      
+  } catch (error) {
+    return res.status(500).json({error:error.message})
+  }
 }
 

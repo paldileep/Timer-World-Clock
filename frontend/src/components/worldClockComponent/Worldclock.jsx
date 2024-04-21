@@ -28,6 +28,8 @@ const Worldclock = () => {
     dispatch(setZone(value))
   }
 
+  const localUser = JSON.parse(localStorage.getItem('user'))
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,7 +51,9 @@ const Worldclock = () => {
     fetchData();
 
     return () => {
-      dispatch(updateAllTimeLeft({ spendTime : spendTimeRef.current}))
+      if(localUser?.token){
+        dispatch(updateAllTimeLeft({ spendTime : spendTimeRef.current}))
+      }
       clearInterval(setIntervalId)
       
     }

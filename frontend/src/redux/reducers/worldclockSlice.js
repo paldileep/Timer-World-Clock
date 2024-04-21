@@ -13,11 +13,15 @@ const worldclockSlice = createSlice({
          zoneList: (state, {payload}) => { 
             state.timeZoneList = payload
          },
+         resetZone: (state) => { 
+            state.currentZone = "Asia/Kolkata"
+         }
 
     }
+
 })
 
 
 export const worldclockSelector = (state) => state.worldclock
-export const { setZone, zoneList } = worldclockSlice.actions
+export const { setZone, zoneList, resetZone } = worldclockSlice.actions
 export const worldclockReducer = worldclockSlice.reducer

@@ -5,7 +5,7 @@ import { setHelper } from '../../redux/reducers/apiHelperSlice'
 import Timer from './Timer'
 import axios from 'axios'
 import "./timerList.scss"
-import Loader from '../../utils/Loader'
+
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -25,6 +25,13 @@ const TimerList = () => {
     return `${minutes} minutes ${seconds} seconds`;
   };
 
+  const user = JSON.parse(localStorage.getItem('user'))
+
+  const headers = {
+    'Content-Type': 'application/json',
+    'token': user?.token 
+  };
+
   const randomNumber = parseInt(Math.random() * 10000000)
 
   const removeTimerHandler = async (id, timeLeft) => {
@@ -34,7 +41,7 @@ const TimerList = () => {
 
         const data = { timerId: id, activeDuration:formatTime(timeLeft) , isDeleted: true, deleteDate: true }
         setLoading(true)
-        await axios.put(`${BASE_URL}/timer`, data)
+        await axios.put(`${BASE_URL}/timer`, data, {headers})
         dispatch(removeTimer({id: id}))
         dispatch(setHelper(id+randomNumber))
         setLoading(false);
@@ -66,7 +73,7 @@ const TimerList = () => {
         const data = { timerId: id, activeDuration: formatTime(timeLeft), timeLeft: timeLeft }
         setLoading(true)
         setActionId(id);
-        await axios.put(`${BASE_URL}/timer`, data)
+        await axios.put(`${BASE_URL}/timer`, data, {headers})
         dispatch(togglePause({id: id}))
         dispatch(setHelper(id+randomNumber))
         setLoading(false);
