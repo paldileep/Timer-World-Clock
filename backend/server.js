@@ -31,7 +31,7 @@ if (cluster.isMaster) {
 
 else {
 
-
+  app.use(cors());
   app.use('/api/v1', routes);
 
   const port = process.env.PORT || 3000;
