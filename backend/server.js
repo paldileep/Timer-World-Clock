@@ -15,9 +15,9 @@ app.use(express.json());
 app.use(cors())
 app.use(cookieParser());
 
-const timerRoutes = require('./routes/timerRoutes')
+const routes = require('./routes/index')
 
-app.use(timerRoutes);
+app.use('/api/v1', routes);
 
 const port = process.env.PORT
 
