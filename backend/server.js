@@ -1,47 +1,30 @@
-const cluster = require('cluster');
-const os = require('os');
 const express = require('express');
 const app = express();
+const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
-const cors = require('cors');
-const dbConnect = require('./db');
-const routes = require('./routes');
 
-dbConnect();
+const cors = require("cors")
+
+
+
+const dbConnect = require('./db')
+dbConnect()
 
 app.use(express.json());
-app.use(cors());
+app.use(cors())
+app.use(cookieParser());
 
-const numCPUs = os.cpus().length;
+const timerRoutes = require('./routes/timerRoutes')
 
-if (cluster.isMaster) {
-  console.log(`Master ${process.pid} is running`);
+app.use(timerRoutes);
 
+const port = process.env.PORT
 
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
+app.use('/', (req, res)=>{
+    res.status(200).send('Api is running')
+})
 
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`Worker ${worker.process.pid} died`);
-  });
-
-} 
-
-else {
-
-  app.use(cors());
-  app.use('/api/v1', routes);
-
-  const port = process.env.PORT || 3000;
-
-  app.use('/', (req, res) => {
-    res.status(200).send('API is running');
-  });
-
-  app.listen(port, () => {
-    console.log(`Worker ${process.pid} is running on port ${port}`);
-  });
-  
-}
+app.listen(port, () => {
+  console.log(`Server is listening at ${port}`);
+});
