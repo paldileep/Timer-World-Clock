@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { timerSelector, setTimer } from "../../redux/reducers/timerSlice"
 import { apiHelperSelector } from '../../redux/reducers/apiHelperSlice'
 import Loader from '../../utils/Loader'
+import { useNavigate } from "react-router-dom"
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -19,8 +20,10 @@ const HistoryList = () => {
   const apiHelperState = useSelector(apiHelperSelector)
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const user = JSON.parse(localStorage.getItem('user'))
+  
 
   const headers = {
     'Content-Type': 'application/json',
@@ -49,17 +52,21 @@ const HistoryList = () => {
     } catch (error) {
 
       if (error.response) {
-
+        
+        if(error.response.data.message === "Token Expired"){
+            localStorage.removeItem('user')
+            navigate('/login')
+        }
         setError(error.response.data.message);
         setLoading(false);
 
       } else if (error.request) {
-
+        
         setError(error.request);
         setLoading(false);
 
       } else {
-  
+    
         setError(error.message);
         setLoading(false);
       }
@@ -168,12 +175,6 @@ const HistoryList = () => {
       fetchTimerList()
     }
   }
-
-  
-  useEffect(()=>{
-    fetchTimerList()
-
-  },[])
 
   useEffect(()=>{
     fetchTimerList()
